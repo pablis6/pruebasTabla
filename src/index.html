@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es" ng-app="app">
+
+<head>
+  <meta charset="utf-8">
+  <!--Con esto garantizamos que se vea bien en dispositivos móviles-->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tabla con suma</title>
+  <link rel="stylesheet" href="estilo.css">
+
+</head>
+
+<body ng-controller="TablaController as control">
+    <div class="linea">
+        <div class="principal">
+            <div class="busqueda">
+                <label>Filtro texto: </label>
+                <input type="text" class="form-control" ng-model="searchFilter" />  
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th class="text-center">Nombre</th>
+                        <th class="text-center">Edad</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="fila in resultValue=(control.tabla | filter:{'nombre':searchFilter})">
+                        <td>{{fila.nombre}}</td>
+                        <td class="text-center">{{fila.edad}}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td class="text-right">SUMA:</td>
+                        <td class="text-center">{{resultValue | suma:'edad'}}</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div class="principal">
+            <div class="busqueda">
+                <label>Filtro check: </label>
+                <ul class="linea">        
+                    <li >
+                        <input type="checkbox" ng-model="control.filtro['Todos']"/> Todos
+                    </li>
+                    <li ng-repeat="fila in (control.tabla | unique: 'nombre')">
+                        <input type="checkbox" ng-model="control.filtro[fila.nombre]"/> {{fila.nombre}}
+                    </li>
+                </ul>  
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th class="text-center">Nombre</th>
+                        <th class="text-center">Edad</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="fila in resultValue2=(control.tabla | filter: control.filtraPorNombre) ">
+                        <td ng-bind="fila.nombre"></td>
+                        <td class="text-center" ng-bind="fila.edad"></td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td class="text-right">SUMA:</td>
+                        <td class="text-center">{{resultValue2 | suma:'edad'}}</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div class="principal">
+            <div class="busqueda">
+                <label>Filtro combo: </label> <br>
+                <select ng-model="modelSelect" ng-options="fila as fila.nombre for fila in (control.tabla | unique: 'nombre')">
+                    <option ng-model="modelSelect" value="">Todos</option>
+                    
+                </select>  
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th class="text-center">Nombre</th>
+                        <th class="text-center">Edad</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="fila in resultValue=(control.tabla | filter:{'nombre':modelSelect.nombre})">
+                        <td>{{fila.nombre}}</td>
+                        <td class="text-center">{{fila.edad}}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td class="text-right">SUMA:</td>
+                        <td class="text-center">{{resultValue | suma:'edad'}}</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+
+  <!-- Importante llamar antes a jQuery para que funcione bootstrap.min.js-->
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script> -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+  <!-- Llamamos al Bootstrap  a través de CDN -->
+  <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script> -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+  <!-- Llamamos a Angular a traves de CDN -->
+  <script type='text/javascript' src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-filter/0.5.8/angular-filter.min.js"></script>
+  
+  <script type="text/javascript" src="tabla.controller.js"></script>
+
+
+  
+  
+</body>
+
+</html>
